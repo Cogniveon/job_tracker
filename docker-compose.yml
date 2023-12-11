@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  app:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./job_tracker.pt:/app/job_tracker.pt
+      - ./images:/app/images
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+    #   interval: 5m
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 15s
+
+  server:
+    restart: unless-stopped
+    image: caddy:2.7.4-alpine
+    command: "caddy reverse-proxy --to app:8080"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:
+  caddy_config:

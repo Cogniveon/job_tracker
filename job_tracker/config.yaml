@@ -1,0 +1,8 @@
+path: /home/alqaholic/Documents/job_tracker/job_tracker/dataset
+train: train/images
+val: val/images
+
+nc: 1
+
+names:
+  0: job

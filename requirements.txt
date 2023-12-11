@@ -1,0 +1,7 @@
+CherryPy==18.8.0
+uvicorn==0.24.0
+Pillow==10.1.0
+numpy==1.26.2
+torch>=1.8.0
+opencv-python>=4.6.0
+ultralytics==8.0.212
