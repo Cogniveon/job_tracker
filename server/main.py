@@ -4,7 +4,7 @@ from datetime import datetime
 
 import cherrypy
 
-from job_tracker.inference import run_inference
+from job_tracker.inference import generate_preview, get_label_text, run_inference
 
 # Set the path to store the images
 IMAGE_FOLDER = "images"
@@ -118,7 +118,8 @@ class CameraApp:
             + name
             + """"));
                         xhr.addEventListener('load', function(event) {
-                            imagePreview.src = imageData;
+                            imagePreview.src = xhr.response;
+                            imagePreview.style.display = "block";
                         })
                     }
                     
@@ -144,7 +145,11 @@ class CameraApp:
 
         result = run_inference(JOB_TRACKER_MODEL_PATH, image_path)[0]
 
-        return result["preview"]
+        # preview = result["preview"]
+        labels = get_label_text(result["labels"])
+        preview = generate_preview(image_path, labels)
+
+        return f"data:image/jpeg;base64,{preview}"
 
 
 if __name__ == "__main__":

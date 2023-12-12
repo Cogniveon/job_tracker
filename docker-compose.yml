@@ -11,6 +11,8 @@ services:
     volumes:
       - ./job_tracker.pt:/app/job_tracker.pt
       - ./images:/app/images
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
     #   interval: 5m
