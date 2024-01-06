@@ -4,7 +4,7 @@ from datetime import datetime
 
 import cherrypy
 
-from job_tracker.inference import generate_preview, get_label_text, run_inference
+from model_src.inference import generate_preview, get_label_text, run_inference
 
 # Set the path to store the images
 IMAGE_FOLDER = "images"
@@ -140,8 +140,6 @@ class CameraApp:
 
         with open(image_path, "wb") as f:
             f.write(base64.b64decode(image_data))
-
-        f.close()
 
         result = run_inference(JOB_TRACKER_MODEL_PATH, image_path)[0]
 

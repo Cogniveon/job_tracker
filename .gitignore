@@ -1,8 +1,8 @@
 images/*
 !images/.gitkeep
-job_tracker/dataset
-job_tracker/runs
-job_tracker/yolo*.pt
+model_src/dataset
+model_src/runs
+model_src/yolo*.pt
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,python,opencv
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,python,opencv
