@@ -35,16 +35,16 @@ ApplicationWindow {
     property ApplicationWindow appWindow: window
     property int windowBorder: 5
 
-    MyAppWindowBorderMouseCurser {
+    AppWindowBorderMouseCurser {
         borderWidth: windowBorder
         anchors.fill: parent
     }
 
-    MyAppWindowResizeHandler {
+    AppWindowResizeHandler {
         borderWidth: windowBorder
     }
 
-    MyAppMainPage {
+    AppMainPage {
         anchors.fill: parent
         anchors.margins: appWindow.visibility === Window.Windowed ? windowBorder : 0
     }

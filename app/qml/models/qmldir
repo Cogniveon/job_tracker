@@ -1,2 +1,2 @@
 module models
-MyAppLanguageModel MyAppLanguageModel.qml
+AppLanguageModel AppLanguageModel.qml

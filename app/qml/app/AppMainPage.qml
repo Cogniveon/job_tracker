@@ -25,7 +25,7 @@ import pyobjects
 
 Page {
     anchors.fill: parent
-    header: MyAppHeader {}
+    header: AppHeader {}
 
     ColumnLayout {
         id: aboutTab

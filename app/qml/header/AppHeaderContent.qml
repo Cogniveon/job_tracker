@@ -35,10 +35,10 @@ Item {
                 color: "transparent"
             }
 
-            MyAppMenu1 {}
-            MyAppMenu2 {}
-            MyAppOptionsMenu {}
-            MyAppHelpMenu {}
+            // AppMenu1 {}
+            // AppMenu2 {}
+            AppOptionsMenu {}
+            // AppHelpMenu {}
         }
 
         Label {
@@ -55,7 +55,7 @@ Item {
             width: menuBar.width
             height: menuBar.height
 
-            MyAppWindowMinimizeButton {
+            AppWindowMinimizeButton {
                 height: buttonWrapper.height
                 anchors.right: maximizeButton.left
 
@@ -64,7 +64,7 @@ Item {
                 }
             }
 
-            MyAppWindowMaximizeButton {
+            AppWindowMaximizeButton {
                 id: maximizeButton
                 height: buttonWrapper.height
                 anchors.right: closeButton.left
@@ -79,7 +79,7 @@ Item {
                 }
             }
 
-            MyAppWindowCloseButton {
+            AppWindowCloseButton {
                 id: closeButton
                 height: buttonWrapper.height
                 anchors.right: buttonWrapper.right

@@ -16,40 +16,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-import QtQuick
+import QtQuick.Controls
+import shared
 
 
-Item {
-    width: parent.width
-    height: headerBar.height
+AppAutoWidthMenu {
+    title: qsTranslate("HeaderBar", "&Menu 2")
 
-    TapHandler {
-        gesturePolicy: TapHandler.DragThreshold
+    Action {
+        text: qsTranslate("HeaderBar", "&Action 1")
+        shortcut: "CTRL+N"
 
-        onTapped: {
-            if (tapCount === 2) {
-                if (appWindow.visibility === Window.Maximized) {
-                    appWindow.showNormal()
-                } else {
-                    appWindow.showMaximized()
-                }
-            }
+        onTriggered: {
+            console.log("Action 1 pressed")
         }
     }
 
-    DragHandler {
-        target: null
-        grabPermissions: TapHandler.CanTakeOverFromAnything
+    Action {
+        text: qsTranslate("HeaderBar", "&Action 2")
 
-        onActiveChanged: {
-            if (active) {
-                appWindow.startSystemMove()
-            }
+        onTriggered: {
+            console.log("Action 2 pressed")
         }
     }
 
-    MyAppHeaderContent {
-        id: headerBar
+    MenuSeparator { }
+
+    Action {
+        text: qsTranslate("HeaderBar", "&Action 3")
+
+        onTriggered: {
+            console.log("Action 3 pressed")
+        }
     }
 
 }

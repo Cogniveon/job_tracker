@@ -16,7 +16,7 @@ For a complete overview please look into the Makefile. The most important target
 
 
 * `build`  
-  Builds the project into build/release/myapp
+  Builds the project into build/release/sample_tracker
 * `build-clean`  
   Cleans up the build directory
 
@@ -51,7 +51,7 @@ For a complete overview please look into the Makefile. The most important target
 # Workflow
 
 Run `make develop-build` after each change in the `data`, `i18n`, or `qml` directories.
-This will *compile* everything into a Python file and move it into the `myapp` directory
+This will *compile* everything into a Python file and move it into the `app` directory
 where it will be picked up on app start.
 
 # Tips

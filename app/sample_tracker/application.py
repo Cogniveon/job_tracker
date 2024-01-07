@@ -4,7 +4,7 @@
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,24 +14,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 import sys
 
-from PySide6.QtCore import QUrl, QTranslator, QLocale, QLibraryInfo
+from PySide6.QtCore import QLibraryInfo, QLocale, QTranslator, QUrl
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
 
-class MyApplication(QGuiApplication):
-
+class Application(QGuiApplication):
     def __init__(self, args):
         super().__init__(args)
         self._engine = QQmlApplicationEngine()
-        self._translator_myapp = QTranslator()
+        self._translator_app = QTranslator()
         self._translator_qt = QTranslator()
 
     def set_window_icon(self):
-        icon = QIcon(':/data/app-icon.svg')
+        icon = QIcon(":/data/app-icon.svg")
         self.setWindowIcon(icon)
 
     def set_up_signals(self):
@@ -45,21 +43,23 @@ class MyApplication(QGuiApplication):
         locale = QLocale(self._engine.uiLanguage())
 
         self.removeTranslator(self._translator_qt)
-        self.removeTranslator(self._translator_myapp)
+        self.removeTranslator(self._translator_app)
 
-        self._translator_qt.load(locale, "qtbase", "_", QLibraryInfo.location(QLibraryInfo.TranslationsPath))
-        self._translator_myapp.load(f':/i18n/{locale.name()}.qm')
+        self._translator_qt.load(
+            locale, "qtbase", "_", QLibraryInfo.location(QLibraryInfo.TranslationsPath)
+        )
+        self._translator_app.load(f":/i18n/{locale.name()}.qm")
 
         self.installTranslator(self._translator_qt)
-        self.installTranslator(self._translator_myapp)
+        self.installTranslator(self._translator_app)
 
         self.setLayoutDirection(locale.textDirection())
 
     def set_up_imports(self):
-        self._engine.addImportPath(':/qml')
+        self._engine.addImportPath(":/qml")
 
     def start_engine(self):
-        self._engine.load(QUrl.fromLocalFile(':/qml/main.qml'))
+        self._engine.load(QUrl.fromLocalFile(":/qml/main.qml"))
 
     def verify(self):
         if not self._engine.rootObjects():

@@ -20,8 +20,8 @@ import QtQuick.Controls
 import shared
 
 
-MyAppAutoWidthMenu {
-    title: qsTranslate("HeaderBar", "&Menu 1")
+AppAutoWidthMenu {
+    title: qsTranslate("HeaderBar", "&Help")
 
     Action {
         text: qsTranslate("HeaderBar", "&Action 1")
@@ -40,29 +40,13 @@ MyAppAutoWidthMenu {
         }
     }
 
+    MenuSeparator { }
+
     Action {
         text: qsTranslate("HeaderBar", "&Action 3")
 
         onTriggered: {
             console.log("Action 3 pressed")
-        }
-    }
-
-    Action {
-        text: qsTranslate("HeaderBar", "&Action 4")
-
-        onTriggered: {
-            console.log("Action 4 pressed")
-        }
-    }
-
-    MenuSeparator { }
-
-    Action {
-        text: qsTranslate("HeaderBar", "&Action 5")
-
-        onTriggered: {
-            console.log("Action 5 pressed")
         }
     }
 

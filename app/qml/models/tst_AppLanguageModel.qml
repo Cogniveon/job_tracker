@@ -20,10 +20,10 @@ import QtQuick 2.0
 import QtTest
 
 Item {
-    property var model: MyAppLanguageModel {}
+    property var model: AppLanguageModel {}
 
     TestCase {
-        name: "MyAppLanguageModelTest"
+        name: "AppLanguageModelTest"
 
         function test_language_de_exists(data) {
             const languages = extractLanguages()

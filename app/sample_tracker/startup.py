@@ -4,7 +4,7 @@
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,28 +24,30 @@ class PreStartUp:
     @staticmethod
     def set_qt_application_name():
         from PySide6.QtCore import QCoreApplication
-        QCoreApplication.setApplicationName('my app name')
-        QCoreApplication.setOrganizationName('my org name')
+
+        QCoreApplication.setApplicationName("Sample Tracker")
+        QCoreApplication.setOrganizationName("University of Cambridge")
 
     @staticmethod
     def set_qt_application_version():
         from PySide6.QtCore import QCoreApplication
-        QCoreApplication.setApplicationVersion('my app version')
+
+        QCoreApplication.setApplicationVersion("v0.0.1")
 
     @staticmethod
     def inject_environment_variables():
         # Qt expects 'qtquickcontrols2.conf' at root level, but the way we handle resources does not allow that.
         # So we need to override the path here
-        os.environ['QT_QUICK_CONTROLS_CONF'] = ':/data/qtquickcontrols2.conf'
+        os.environ["QT_QUICK_CONTROLS_CONF"] = ":/data/qtquickcontrols2.conf"
 
 
 class StartUp:
-    """Necessary steps for myapp"""
+    """Necessary steps for app"""
 
     @staticmethod
     def import_resources():
         try:
-            import myapp.generated_resources
+            import sample_tracker.generated_resources
         except ImportError as e:
             print(e, file=sys.stderr)
             sys.exit(1)
@@ -53,15 +55,16 @@ class StartUp:
     @staticmethod
     def import_bindings():
         try:
-            import myapp.pyobjects
+            import sample_tracker.pyobjects
         except ImportError as e:
             print(e, file=sys.stderr)
             sys.exit(1)
 
     @staticmethod
     def start_application():
-        from myapp.application import MyApplication
-        app = MyApplication(sys.argv)
+        from sample_tracker.application import Application
+
+        app = Application(sys.argv)
 
         app.set_window_icon()
         app.set_up_signals()

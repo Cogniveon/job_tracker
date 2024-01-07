@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="he_IL" sourcelanguage="en_US">
+<TS version="2.1" language="ja_JP" sourcelanguage="en">
 <context>
     <name>HeaderBar</name>
     <message>
@@ -43,27 +43,46 @@
         <source>&amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Showcase translated Qt strings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Languages</name>
     <message>
         <source>English</source>
-        <translation>אנגלית</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>German</source>
-        <translation>גֶרמָנִיָת</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hebrew</source>
-        <translation>עִברִית</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainPage</name>
     <message>
         <source>Have fun!</source>
-        <translation>תעשה חיים!</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exposed from Python: &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MessageBoxes</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change the language and look at the &apos;Yes&apos; and &apos;Cancel&apos; buttons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

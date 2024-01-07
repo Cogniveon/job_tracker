@@ -2,10 +2,10 @@
 
 
 def main():
-    from myapp.startup import perform_startup
+    from sample_tracker.startup import perform_startup
 
     perform_startup()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
