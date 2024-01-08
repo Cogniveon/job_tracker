@@ -25,8 +25,8 @@ import handlers
 ApplicationWindow {
     id: window
     visible: true
-    width: 1280
-    height: 720
+    width: 720
+    height: 610
     flags: Qt.FramelessWindowHint | Qt.Window
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft

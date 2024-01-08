@@ -69,6 +69,7 @@ class StartUp:
         app.set_window_icon()
         app.set_up_signals()
         app.set_up_imports()
+        app.set_up_context()
         app.start_engine()
         app.verify()
 

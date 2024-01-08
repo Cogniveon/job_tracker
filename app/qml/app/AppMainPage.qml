@@ -21,6 +21,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import header
 import pyobjects
+// import video_backend
+import camera_stream
 
 
 Page {
@@ -32,48 +34,101 @@ Page {
         spacing: 8
         width: parent.width
 
-        Rectangle { color: "transparent"; height: 30; width: 10 }
+        Rectangle { color: "transparent"; height: 10; width: 10 }
 
-        Image {
-            source: "qrc:/data/app-icon.svg"
-            asynchronous: true
-            Layout.preferredWidth: 308
-            Layout.preferredHeight: 226
+        CameraStream {
+            id: cameraStream
+            Layout.preferredWidth: 640
+            Layout.preferredHeight: 480
             Layout.alignment: Qt.AlignHCenter
         }
 
-        Rectangle { color: "transparent"; height: 45; width: 10 }
+        RowLayout {
+            spacing: 8
+            width: parent.width
 
-        Label {
-            text: Qt.application.name + ' (' +  Qt.application.version + ')'
-            font.bold: true
-            font.pixelSize: Qt.application.font.pixelSize * 1.5
-            Layout.alignment: Qt.AlignHCenter
+            property bool isStreamingCamera: true
+
+
+            ComboBox {
+                id: captureDeviceSelect
+                Layout.alignment: Qt.AlignHCenter
+                model: cameraStream.captureOptions
+
+                onCurrentIndexChanged: cameraStream.onSelectionChanged(currentIndex)
+            }
+            
+            Button {
+                text: "Capture"
+                Layout.alignment: Qt.AlignHCenter
+                onClicked: {
+                    if (parent.isStreamingCamera) {
+                        parent.isStreamingCamera = false
+                        cameraStream.startDetection()
+                    }
+                    else {
+                        cameraStream.resume()
+                        parent.isStreamingCamera = true
+                    }
+                }
+            }
         }
 
-        Label {
-            text: 'Running on ' +  Qt.platform.os
-            font.bold: true
-            font.pixelSize: Qt.application.font.pixelSize * 1.5
-            Layout.alignment: Qt.AlignHCenter
-        }
+        // VideoBackend {
+        //     id: videoBackend
+        // }
+        
+        // Image {
+        //     id: videoOutput
+        //     // source: "qrc:/data/app-icon.svg"
+        //     // source: "image://videostream/frame?" + currentFrameNumber
+        //     asynchronous: true
+        //     Layout.preferredWidth: 640
+        //     Layout.preferredHeight: 480
+        //     Layout.alignment: Qt.AlignHCenter
+        // }
 
-        Rectangle { color: "transparent"; height: 45; width: 10 }
+        // Connections {
+        //     target: videoBackend
 
-        Label {
-            text: qsTranslate("MainPage", "Have fun!")
-            color: Material.accent
-            font.bold: true
-            font.pixelSize: Qt.application.font.pixelSize * 2
-            Layout.alignment: Qt.AlignHCenter
-        }
+        //     function newImage(newImage) {
+        //         console.log("newImage", newImage.size);
+        //         videoOutput.source = newImage;
+        //     }
+        // }
 
-        Rectangle { color: "transparent"; height: 45; width: 10 }
+        // Rectangle { color: "transparent"; height: 45; width: 10 }
 
-        Label {
-            text: qsTranslate("MainPage", "Exposed from Python: '%1'").arg(SingletonPyObject.exposed_property)
-            Layout.alignment: Qt.AlignHCenter
-        }
+        // Label {
+        //     text: Qt.application.name + ' (' +  Qt.application.version + ')'
+        //     font.bold: true
+        //     font.pixelSize: Qt.application.font.pixelSize * 1.5
+        //     Layout.alignment: Qt.AlignHCenter
+        // }
+
+        // Label {
+        //     text: 'Running on ' +  Qt.platform.os
+        //     font.bold: true
+        //     font.pixelSize: Qt.application.font.pixelSize * 1.5
+        //     Layout.alignment: Qt.AlignHCenter
+        // }
+
+        // Rectangle { color: "transparent"; height: 45; width: 10 }
+
+        // Label {
+        //     text: qsTranslate("MainPage", "Have fun!")
+        //     color: Material.accent
+        //     font.bold: true
+        //     font.pixelSize: Qt.application.font.pixelSize * 2
+        //     Layout.alignment: Qt.AlignHCenter
+        // }
+
+        // Rectangle { color: "transparent"; height: 45; width: 10 }
+
+        // Label {
+        //     text: qsTranslate("MainPage", "Exposed from Python: '%1'").arg(SingletonPyObject.exposed_property)
+        //     Layout.alignment: Qt.AlignHCenter
+        // }
     }
 
 }

@@ -58,6 +58,9 @@ class Application(QGuiApplication):
     def set_up_imports(self):
         self._engine.addImportPath(":/qml")
 
+    def set_up_context(self):
+        pass
+
     def start_engine(self):
         self._engine.load(QUrl.fromLocalFile(":/qml/main.qml"))
 
