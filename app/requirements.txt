@@ -1,3 +1,6 @@
 PySide6>=6.6.1
 pytest>=7.4.4
-opencv-python==4.9.0.80
+numpy==1.26.2
+torch>=1.8.0
+opencv-python>=4.6.0
+ultralytics==8.0.212
