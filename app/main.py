@@ -1,25 +1,26 @@
+import json
+import os
 import sys
 import time
+from datetime import datetime
 
 import camera_preview
 import cv2
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtGui import QGuiApplication, QImage
 from PySide6.QtQml import QmlElement, QQmlApplicationEngine
-from ultralytics import YOLO
+from sample_tracker import SampleTracker
 from utils import opencv_to_qimage, qimage_to_opencv
 
 
 class Backend(QObject):
-    showLoading = Signal()
-    hideLoading = Signal()
     newPreview = Signal(QImage, arguments=["preview"])
 
     def __init__(self):
         super().__init__()
         # Initialize camera and YOLOv8 model
         self._image = QImage()
-        self._model = YOLO("sample_tracker.pt")  # yolov8n.pt
+        self.sampleTracker = SampleTracker()
 
     @Slot(QImage)
     def updateImage(self, image):
@@ -27,20 +28,29 @@ class Backend(QObject):
 
     @Slot(int, int)
     def startDetection(self, user, room):
-        self.showLoading.emit()
         print(f"User: {user} Room: {room}")
+        image = qimage_to_opencv(self._image)
+        labels = self.sampleTracker.run_inference(image)
 
-        cv_img = qimage_to_opencv(self._image)
-        frame_rgb = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
-        results = self._model(frame_rgb)
-        result_plot = results[0].plot(conf=False, probs=False, labels=True)
-        result_plot = cv2.cvtColor(result_plot, cv2.COLOR_RGB2BGR)
+        if not os.path.exists("storage/"):
+            os.mkdir("storage")
 
-        # cv2.rectangle(cv_img, (50, 50), (200, 200), (0, 255, 0), 2)
+        dt = datetime.now()
+        timestamp = datetime.timestamp(dt)
 
-        self.newPreview.emit(opencv_to_qimage(result_plot))
+        output_path = f"storage/{timestamp}-{0}-{1}"
+        os.mkdir(output_path)
 
-        self.hideLoading.emit()
+        for i, label in enumerate(labels):
+            print(label)
+            with open(os.path.join(output_path, f"{i}.json"), "w") as f:
+                f.write(json.dumps(label))
+
+        preview = self.sampleTracker.annotate_labels(image, labels)
+
+        cv2.imwrite("t.jpg", preview)
+
+        self.newPreview.emit(opencv_to_qimage(preview))
 
 
 def main():

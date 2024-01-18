@@ -38,9 +38,12 @@ class CameraPreview(QQuickPaintedItem):
 
         ret, frame = self.cap.read()
         if ret:
-            convert_to_Qt_format = opencv_to_qimage(frame)
+            # convert_to_Qt_format = opencv_to_qimage(frame)
+            convert_to_Qt_format = opencv_to_qimage(
+                cv2.imread("../model_src/dataset/extracted_frames/images/frame_49.jpg")
+            )
             self._image = convert_to_Qt_format.scaled(
-                640, 480, aspectMode=Qt.AspectRatioMode.KeepAspectRatio
+                640, 480, aspectMode=Qt.AspectRatioMode.IgnoreAspectRatio
             )
             self.newImage.emit(self._image)
             # Triggers the paint() method
