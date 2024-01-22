@@ -1,3 +1,4 @@
+import config
 import cv2
 from PySide6.QtCore import Property, QObject, Qt, QTimer, Signal, Slot
 from PySide6.QtGui import QImage, QPainter
@@ -19,7 +20,7 @@ class CameraPreview(QQuickPaintedItem):
 
         self._image = QImage()
 
-        self._selectedCapture = 0
+        self._selectedCapture = config.CAMERA_DEVICE_ID
         self.cap = cv2.VideoCapture(self._selectedCapture)
 
         # Timer for updating the content
@@ -38,7 +39,7 @@ class CameraPreview(QQuickPaintedItem):
 
         ret, frame = self.cap.read()
         if ret:
-            # convert_to_Qt_format = opencv_to_qimage(frame)
+            convert_to_Qt_format = opencv_to_qimage(frame)
             convert_to_Qt_format = opencv_to_qimage(
                 cv2.imread("../model_src/dataset/extracted_frames/images/frame_49.jpg")
             )

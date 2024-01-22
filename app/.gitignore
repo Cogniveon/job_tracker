@@ -1,2 +1,4 @@
-./storage/*
+storage/
 yolov8n.pt
+config.py
+sample_tracker.onnx

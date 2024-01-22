@@ -1,5 +1,6 @@
 import base64
 
+import config
 import cv2
 import numpy as np
 from googleapiclient.discovery import build
@@ -9,10 +10,10 @@ from ultralytics import YOLO
 
 class SampleTracker:
     def __init__(self) -> None:
-        self.model = YOLO("sample_tracker.pt")  # yolov8n.pt sample_tracker.pt
-        self.gvision = build(
-            "vision", "v1", developerKey="AIzaSyCEbem_3jtvVXfQpxzKZeul1zfMq7lCMfY"
-        )
+        self.model = YOLO(
+            "sample_tracker.onnx", task="detect"
+        )  # yolov8n.pt sample_tracker.pt
+        self.gvision = build("vision", "v1", developerKey=config.GOOGLE_API_KEY)
 
     def annotate_labels(self, cv_image, labels):
         image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
@@ -82,8 +83,7 @@ class SampleTracker:
         return labels, rois
 
     def run_inference(self, image):
-        cv2.imshow("im", image)
-        results = self.model(image)
+        results = self.model(image, imgsz=640)
         r = results[0].cpu()
 
         rects = [np.floor(box.xywh.numpy()[0]).astype(int) for box in r.boxes]
@@ -123,8 +123,8 @@ class SampleTracker:
 
             labels[i] = label
 
-        result_plot = r.plot(conf=False, probs=False, labels=True)
-        result_plot = cv2.cvtColor(result_plot, cv2.COLOR_RGB2BGR)
+        # result_plot = r.plot(conf=False, probs=False, labels=True)
+        # result_plot = cv2.cvtColor(result_plot, cv2.COLOR_RGB2BGR)
 
         # cv2.rectangle(cv_img, (50, 50), (200, 200), (0, 255, 0), 2)
 

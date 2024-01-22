@@ -6,6 +6,7 @@ from datetime import datetime
 
 import camera_preview
 import cv2
+import numpy as np
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtGui import QGuiApplication, QImage
 from PySide6.QtQml import QmlElement, QQmlApplicationEngine
@@ -48,7 +49,8 @@ class Backend(QObject):
 
         preview = self.sampleTracker.annotate_labels(image, labels)
 
-        cv2.imwrite("t.jpg", preview)
+        cv2.imwrite(os.path.join(output_path, "image.jpg"), image)
+        cv2.imwrite(os.path.join(output_path, "preview.jpg"), preview)
 
         self.newPreview.emit(opencv_to_qimage(preview))
 
