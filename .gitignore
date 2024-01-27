@@ -4,6 +4,7 @@ model_src/dataset
 model_src/runs
 model_src/yolo*.pt
 job_tracker_v2.onnx
+server/config.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,python,opencv
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,python,opencv
