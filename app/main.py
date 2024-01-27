@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 
 import camera_preview
+import config
 import cv2
 import numpy as np
 from PySide6.QtCore import QObject, Signal, Slot
@@ -61,9 +62,7 @@ def main():
 
     backend = Backend()
     engine.rootContext().setContextProperty("backend", backend)
-    engine.setInitialProperties(
-        {"users": ["Rohit", "Anand"], "rooms": ["Room 1", "Room 2", "Room 3"]}
-    )
+    engine.setInitialProperties({"users": config.USERS, "rooms": config.ROOMS})
 
     engine.load("Main.qml")
     if not engine.rootObjects():

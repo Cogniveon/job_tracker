@@ -20,10 +20,13 @@ COPY requirements.txt .
 RUN pip install --user --no-cache-dir --upgrade -r requirements.txt
 
 # Copy the inference module
-COPY job_tracker /app/job_tracker
+COPY model_src /app/model_src
+
+# Copy the model
+COPY job_tracker_v2.onnx sample_tracker.onnx
 
 # Copy the app
-COPY server/main.py /app/main.py
+COPY server/* .
 
 # Expose the app's port
 EXPOSE 8080

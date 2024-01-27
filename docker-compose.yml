@@ -9,7 +9,8 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./job_tracker.pt:/app/job_tracker.pt
+      - ./job_tracker_v2.pt:/app/job_tracker.pt
+      - ./job_tracker_v2.onnx:/app/job_tracker.onnx
       - ./images:/app/images
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
@@ -19,6 +20,10 @@ services:
     #   timeout: 5s
     #   retries: 3
     #   start_period: 15s
+    networks:
+      - mosquitto
+    depends_on:
+      - mosquitto
 
   server:
     restart: unless-stopped
@@ -33,6 +38,29 @@ services:
     depends_on:
       - app
 
+  # docker run -it -p 1883:1883 -p 9001:9001 -v mosquitto.conf:/mosquitto/config/mosquitto.conf -v /mosquitto/data -v /mosquitto/log eclipse-mosquitto
+  mosquitto:
+    restart: unless-stopped
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    networks:
+      - mosquitto
+
+
+networks:
+    mosquitto:
+        name: mosquitto
+        driver: bridge
+
+
 volumes:
+  mosquitto_data:
+  mosquitto_log:
   caddy_data:
   caddy_config:

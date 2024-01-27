@@ -6,3 +6,5 @@ torch>=1.8.0
 opencv-python>=4.6.0
 ultralytics==8.0.212
 google-api-python-client==2.110.0
+paho-mqtt==1.6.1
+onnxruntime==1.16.2

@@ -1,17 +1,50 @@
 import base64
+import json
 import os
 from datetime import datetime
 
 import cherrypy
-
-from model_src.inference import generate_preview, get_label_text, run_inference
+import cv2
+import paho.mqtt.client as mqtt
+from sample_tracker import SampleTracker
 
 # Set the path to store the images
 IMAGE_FOLDER = "images"
 JOB_TRACKER_MODEL_PATH = "job_tracker.pt"
 
 
+# MQTT callbacks
+# The callback for when the client receives a CONNACK response from the server.
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code " + str(rc))
+
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    # client.subscribe("$SYS/#")
+    client.subscribe("room-cutup")
+
+
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    print("mqtt:" + msg.topic + " " + str(msg.payload))
+
+
+# CherryPy Server
 class CameraApp:
+    def __init__(self) -> None:
+        self.mqtt_client = mqtt.Client()
+        self.mqtt_client.on_connect = on_connect
+        self.mqtt_client.on_message = on_message
+
+        # self.mqtt_client.username_pw_set(username="user_name", password="password") # uncomment if you use password auth
+        self.mqtt_client.connect("mosquitto", 1883, 60)
+
+        # Blocking call that processes network traffic, dispatches callbacks and
+        # handles reconnecting.
+        # Other loop*() functions are available that give a threaded interface and a
+        # manual interface.
+        self.mqtt_client.loop_start()
+
     @cherrypy.expose
     def index(self, room=None, name=None):
         rooms = ["cutup", "embedding", "microtomy"]
@@ -64,12 +97,13 @@ class CameraApp:
             </head>
             <body>
                 <h1>Click a Picture</h1>
-                <button onclick="capture()">Capture</button>
+                <button id="capture-btn" onclick="capture()">Capture</button>
                 <br>
                 <canvas id="camera-view" width="640" height="480" style="border: 2px solid black; display:block;"></canvas>
                 <br>
-                <img id="image-preview" src="" alt="Image Preview" style="display:none; max-width: 300px; max-height: 300px;">
+                <img id="image-preview" src="" alt="Image Preview" style="display:none; max-width: 640px; max-height: 480px;">
                 <script>
+                    var captureBtn = document.getElementById("capture-btn");
                     var cameraView = document.getElementById("camera-view");
                     var context = cameraView.getContext("2d");
                     
@@ -103,10 +137,19 @@ class CameraApp:
                     }
                     
                     function capture() {
+                        if (cameraView.style.display == 'none') {
+                            cameraView.style.display = "block;
+                            imagePreview.style.display = "none";
+                            captureBtn.innerText = "Capture";
+                            return;
+                        }
+
                         var imageData = cameraView.toDataURL("image/jpeg", 0.9); // Use "image/jpeg" format with 0.9 quality
                         var imagePreview = document.getElementById("image-preview");
                         imagePreview.src = imageData;
                         imagePreview.style.display = "block";
+                        captureBtn.innerText = "Resume";
+                        cameraView.style.display = "none";
                         
                         // Send the image data to the server
                         var xhr = new XMLHttpRequest();
@@ -141,13 +184,35 @@ class CameraApp:
         with open(image_path, "wb") as f:
             f.write(base64.b64decode(image_data))
 
-        result = run_inference(JOB_TRACKER_MODEL_PATH, image_path)[0]
+        image = cv2.imread(image_path)
 
+        sample_tracker = SampleTracker()
+
+        labels = sample_tracker.run_inference(image)
+
+        for i, label in enumerate(labels):
+            # print(label)
+            self.mqtt_client.publish(
+                f"room-{room}",
+                json.dumps(
+                    {
+                        "user": name,
+                        "text": label["text"],
+                        "rect": label["rect"],
+                        "timestamp": timestamp,
+                    }
+                ),
+            )
+
+        preview = sample_tracker.annotate_labels(image, labels)
+
+        # from model_src.inference import generate_preview, get_label_text, run_inference
+        # result = run_inference(JOB_TRACKER_MODEL_PATH, image_path)[0]
         # preview = result["preview"]
-        labels = get_label_text(result["labels"])
-        preview = generate_preview(image_path, labels)
+        # labels = get_label_text(result["labels"])
+        # preview = generate_preview(image_path, labels)
 
-        return f"data:image/jpeg;base64,{preview}"
+        return f"data:image/jpeg;base64,{base64.b64encode(cv2.imencode('.jpg', preview)[1]).decode('utf-8')}"
 
 
 if __name__ == "__main__":
