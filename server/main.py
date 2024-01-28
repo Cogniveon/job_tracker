@@ -99,11 +99,10 @@ class CameraApp:
                 <h1>Click a Picture</h1>
                 <button id="capture-btn" onclick="capture()">Capture</button>
                 <br>
-                <canvas id="camera-view" width="640" height="480" style="border: 2px solid black; display:block;"></canvas>
+                <canvas id="camera-view" width="1280" height="720" style="border: 2px solid black; display:block;"></canvas>
                 <br>
-                <img id="image-preview" src="" alt="Image Preview" style="display:none; max-width: 640px; max-height: 480px;">
+                <img id="image-preview" src="" alt="Image Preview" style="display:none; max-width: 1280px; max-height: 720px;">
                 <script>
-                    var captureBtn = document.getElementById("capture-btn");
                     var cameraView = document.getElementById("camera-view");
                     var context = cameraView.getContext("2d");
                     
